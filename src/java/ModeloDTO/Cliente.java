@@ -10,6 +10,23 @@ public class Cliente {
     private String correo;
     private String numeroContacto1;
     private String numeroContacto2;
+    
+        public Cliente() {}
+
+    // Constructor con parámetros
+    public Cliente(int id, String cedula, String nombreCompleto, String direccion, 
+                   String fechaNacimiento, String fechaExpedicion, String correo,
+                   String numeroContacto1, String numeroContacto2) {
+        this.id = id;
+        this.cedula = cedula;
+        this.nombreCompleto = nombreCompleto;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaExpedicion = fechaExpedicion;
+        this.correo = correo;
+        this.numeroContacto1 = numeroContacto1;
+        this.numeroContacto2 = numeroContacto2;
+    }
 
     // Getters y Setters
     public int getId() { return id; }

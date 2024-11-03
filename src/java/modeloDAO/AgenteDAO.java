@@ -2,135 +2,191 @@ package modeloDAO;
 
 import config.Conexion;
 import modeloDTO.Agente;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AgenteDAO {
     private Conexion conexion = new Conexion();
+    private List<Agente> listaAgentesPrueba;
+
+    public AgenteDAO() {
+        inicializarDatosPrueba();
+    }
+
+    private void inicializarDatosPrueba() {
+        listaAgentesPrueba = new ArrayList<>();
+        
+        Agente agente1 = new Agente();
+        agente1.setId(1);
+        agente1.setCedula("123456789");
+        agente1.setLogin("jperez");
+        agente1.setNombreCompleto("Juan Perez");
+        agente1.setCorreo("juan.perez@ejemplo.com");
+        agente1.setCelular("1234567890");
+        agente1.setFechaNacimiento("1990-01-01");
+        agente1.setFechaExpedicion("2010-01-01");
+        agente1.setDireccion("Calle Falsa 123");
+        agente1.setPassword("12345");
+
+        Agente agente2 = new Agente();
+        agente2.setId(2);
+        agente2.setCedula("987654321");
+        agente2.setLogin("mlopez");
+        agente2.setNombreCompleto("Maria Lopez");
+        agente2.setCorreo("maria.lopez@ejemplo.com");
+        agente2.setCelular("0987654321");
+        agente2.setFechaNacimiento("1985-05-05");
+        agente2.setFechaExpedicion("2005-05-05");
+        agente2.setDireccion("Avenida Siempre Viva 742");
+        agente2.setPassword("54321");
+
+        listaAgentesPrueba.add(agente1);
+        listaAgentesPrueba.add(agente2);
+    }
 
     public List<Agente> listar() {
-        List<Agente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM agente_comercial";
-        try (Connection con = conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
+    List<Agente> listaAgentes = new ArrayList<>();
+    String sql = "SELECT * FROM agente_comercial";
+
+    try (Connection con = conexion.getConnection()) {
+        if (con == null) {
+            System.out.println("Conexión a la base de datos fallida. Usando datos de prueba.");
+            return listaAgentesPrueba; // Retorna los datos de prueba directamente
+        }
+        
+        try (PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Agente agente = new Agente();
                 agente.setId(rs.getInt("id"));
                 agente.setCedula(rs.getString("cedula"));
                 agente.setLogin(rs.getString("login"));
                 agente.setNombreCompleto(rs.getString("nombre_completo"));
-                // Mapea los demás campos
-                lista.add(agente);
+                agente.setCorreo(rs.getString("correo_electronico"));
+                agente.setCelular(rs.getString("celular"));
+                agente.setFechaNacimiento(rs.getString("fecha_nacimiento"));
+                agente.setFechaExpedicion(rs.getString("fecha_expedicion"));
+                agente.setDireccion(rs.getString("direccion"));
+                agente.setPassword(rs.getString("contrasena"));
+                listaAgentes.add(agente);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return lista;
+    } catch (SQLException e) {
+        System.err.println("Error al listar agentes en la base de datos: " + e.getMessage());
+        return listaAgentesPrueba; // Retorna los datos de prueba en caso de error en la base de datos
     }
-
+    return listaAgentes;
+}
     public boolean agregar(Agente agente) {
-        String sql = "INSERT INTO agente_comercial (login, contrasena, nombre_completo, cedula, direccion, fecha_nacimiento, fecha_expedicion, correo_electronico, celular) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO agente_comercial (cedula, login, nombre_completo, correo_electronico, celular, fecha_nacimiento, fecha_expedicion, direccion, contrasena) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection con = conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, agente.getLogin());
-            ps.setString(2, agente.getPassword());
+
+            ps.setString(1, agente.getCedula());
+            ps.setString(2, agente.getLogin());
             ps.setString(3, agente.getNombreCompleto());
-            ps.setString(4, agente.getCedula());
-            ps.setString(5, agente.getDireccion());
+            ps.setString(4, agente.getCorreo());
+            ps.setString(5, agente.getCelular());
             ps.setString(6, agente.getFechaNacimiento());
             ps.setString(7, agente.getFechaExpedicion());
-            ps.setString(8, agente.getCorreo());
-            ps.setString(9, agente.getCelular());
+            ps.setString(8, agente.getDireccion());
+            ps.setString(9, agente.getPassword());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error al agregar agente en la base de datos. Agregando a lista de prueba.");
+            agente.setId(listaAgentesPrueba.size() + 1);
+            return listaAgentesPrueba.add(agente);
         }
-        return false;
-    }
-
-    public Agente listarPorId(int id) {
-        Agente agente = null;
-        String sql = "SELECT * FROM agente_comercial WHERE id = ?";
-        try (Connection con = conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                agente = new Agente();
-                agente.setId(rs.getInt("id"));
-                agente.setCedula(rs.getString("cedula"));
-                agente.setLogin(rs.getString("login"));
-                agente.setNombreCompleto(rs.getString("nombre_completo"));
-                // Mapea los demás campos
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return agente;
     }
 
     public boolean actualizar(Agente agente) {
-        String sql = "UPDATE agente_comercial SET login = ?, contrasena = ?, nombre_completo = ?, cedula = ?, direccion = ?, fecha_nacimiento = ?, fecha_expedicion = ?, correo_electronico = ?, celular = ? WHERE id = ?";
-        try (Connection con = conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, agente.getLogin());
-            ps.setString(2, agente.getPassword());
-            ps.setString(3, agente.getNombreCompleto());
-            ps.setString(4, agente.getCedula());
-            ps.setString(5, agente.getDireccion());
-            ps.setString(6, agente.getFechaNacimiento());
-            ps.setString(7, agente.getFechaExpedicion());
-            ps.setString(8, agente.getCorreo());
-            ps.setString(9, agente.getCelular());
-            ps.setInt(10, agente.getId());
-            return ps.executeUpdate() > 0;
+        String sql = "UPDATE agente_comercial SET cedula = ?, login = ?, nombre_completo = ?, correo_electronico = ?, celular = ?, fecha_nacimiento = ?, fecha_expedicion = ?, direccion = ?, contrasena = ? WHERE id = ?";
+
+        try (Connection con = conexion.getConnection()) {
+            if (con == null) {
+                for (int i = 0; i < listaAgentesPrueba.size(); i++) {
+                    if (listaAgentesPrueba.get(i).getId() == agente.getId()) {
+                        listaAgentesPrueba.set(i, agente);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, agente.getCedula());
+                ps.setString(2, agente.getLogin());
+                ps.setString(3, agente.getNombreCompleto());
+                ps.setString(4, agente.getCorreo());
+                ps.setString(5, agente.getCelular());
+                ps.setString(6, agente.getFechaNacimiento());
+                ps.setString(7, agente.getFechaExpedicion());
+                ps.setString(8, agente.getDireccion());
+                ps.setString(9, agente.getPassword());
+                ps.setInt(10, agente.getId());
+                return ps.executeUpdate() > 0;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al actualizar agente: " + e.getMessage());
+            return false;
         }
-        return false;
     }
 
     public boolean eliminar(int id) {
         String sql = "DELETE FROM agente_comercial WHERE id = ?";
-        try (Connection con = conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
-    public List<String> obtenerConsolidado(int agenteId, String mes) {
-        List<String> consolidado = new ArrayList<>();
-        String sql = "SELECT i.codigo, i.descripcion, i.tipo_inmueble, c.tipo_contrato, c.fecha_creacion, cl.nombre_completo " +
-                     "FROM contrato c " +
-                     "JOIN inmueble i ON c.inmueble_codigo = i.id " +
-                     "JOIN cliente cl ON c.cliente_id = cl.id " +
-                     "WHERE c.agente_comercial_id = ? AND MONTH(c.fecha_creacion) = ?";
-        try (Connection con = conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, agenteId);
-            ps.setString(2, mes);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String registro = "Inmueble: " + rs.getString("codigo") + ", " +
-                                  "Descripción: " + rs.getString("descripcion") + ", " +
-                                  "Tipo: " + rs.getString("tipo_inmueble") + ", " +
-                                  "Contrato: " + rs.getString("tipo_contrato") + ", " +
-                                  "Fecha: " + rs.getString("fecha_creacion") + ", " +
-                                  "Cliente: " + rs.getString("nombre_completo");
-                consolidado.add(registro);
+        try (Connection con = conexion.getConnection()) {
+            if (con == null) {
+                return listaAgentesPrueba.removeIf(agente -> agente.getId() == id);
+            }
+            
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                return ps.executeUpdate() > 0;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error al eliminar agente: " + e.getMessage());
+            return false;
         }
-        return consolidado;
     }
+
+    public Agente listarPorId(int id) {
+        String sql = "SELECT * FROM agente_comercial WHERE id = ?";
+
+        try (Connection con = conexion.getConnection()) {
+            if (con == null) {
+                return listaAgentesPrueba.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+            }
+            
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    Agente agente = new Agente();
+                    agente.setId(rs.getInt("id"));
+                    agente.setCedula(rs.getString("cedula"));
+                    agente.setLogin(rs.getString("login"));
+                    agente.setNombreCompleto(rs.getString("nombre_completo"));
+                    agente.setCorreo(rs.getString("correo_electronico"));
+                    agente.setCelular(rs.getString("celular"));
+                    agente.setFechaNacimiento(rs.getString("fecha_nacimiento"));
+                    agente.setFechaExpedicion(rs.getString("fecha_expedicion"));
+                    agente.setDireccion(rs.getString("direccion"));
+                    agente.setPassword(rs.getString("contrasena"));
+                    return agente;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener agente por ID: " + e.getMessage());
+        }
+        return null;}
     public Agente validarCredenciales(String login, String password) {
         Agente agente = null;
         String sql = "SELECT * FROM agente_comercial WHERE login = ? AND contrasena = ?";

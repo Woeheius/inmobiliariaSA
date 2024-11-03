@@ -11,6 +11,24 @@ public class Agente {
     private String fechaExpedicion;
     private String correo;
     private String celular;
+    
+    public Agente() {}
+
+    // Constructor con parámetros
+    public Agente(int id, String login, String password, String cedula, String nombreCompleto, String direccion, 
+                  String fechaNacimiento, String fechaExpedicion, String correo, String celular) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.cedula = cedula;
+        this.nombreCompleto = nombreCompleto;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaExpedicion = fechaExpedicion;
+        this.correo = correo;
+        this.celular = celular;
+    }
+
 
     // Getters y Setters
     public int getId() { return id; }

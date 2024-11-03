@@ -9,6 +9,22 @@ public class Contrato {
     private String fechaExpiracion;
     private double valor;
     private double porcentajeComision;
+    
+        public Contrato() {}
+
+    // Constructor con parámetros
+    public Contrato(int id, String codigo, String descripcion, String tipoContrato, 
+                    String fechaCreacion, String fechaExpiracion, double valor, 
+                    double porcentajeComision) {
+        this.id = id;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.tipoContrato = tipoContrato;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaExpiracion = fechaExpiracion;
+        this.valor = valor;
+        this.porcentajeComision = porcentajeComision;
+    }
 
     // Getters y Setters
     public int getId() { return id; }

@@ -19,11 +19,11 @@ public class AgenteController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        if (action == null) action = "listar";
+
         switch (action) {
             case "listar":
-                List<Agente> listaAgentes = agenteDAO.listar();
-                request.setAttribute("listaAgentes", listaAgentes);
-                request.getRequestDispatcher("views/agentes/listar.jsp").forward(request, response);
+                listarAgentes(request, response);
                 break;
             case "registrar":
                 request.getRequestDispatcher("views/agentes/registrar.jsp").forward(request, response);
@@ -39,17 +39,16 @@ public class AgenteController extends HttpServlet {
                 agenteDAO.eliminar(idEliminar);
                 response.sendRedirect("AgenteController?action=listar");
                 break;
-            case "consolidado":
-                int agenteId = Integer.parseInt(request.getParameter("id"));
-                String mes = request.getParameter("mes"); // Mes en formato "MM"
-                List<String> consolidado = agenteDAO.obtenerConsolidado(agenteId, mes);
-                request.setAttribute("consolidadoMes", consolidado);
-                request.getRequestDispatcher("views/agentes/consolidado.jsp").forward(request, response);
-                break;
             default:
-                response.sendRedirect("AgenteController?action=listar");
+                listarAgentes(request, response);
                 break;
         }
+    }
+
+    private void listarAgentes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Agente> listaAgentes = agenteDAO.listar();
+        request.setAttribute("listaAgentes", listaAgentes);
+        request.getRequestDispatcher("views/agentes/AgentePrincipal.jsp").forward(request, response);
     }
 
     @Override
@@ -57,15 +56,15 @@ public class AgenteController extends HttpServlet {
         String action = request.getParameter("action");
 
         Agente agente = new Agente();
-        agente.setLogin(request.getParameter("login"));
-        agente.setPassword(request.getParameter("password"));
         agente.setCedula(request.getParameter("cedula"));
+        agente.setLogin(request.getParameter("login"));
         agente.setNombreCompleto(request.getParameter("nombreCompleto"));
-        agente.setDireccion(request.getParameter("direccion"));
-        agente.setFechaNacimiento(request.getParameter("fechaNacimiento"));
-        agente.setFechaExpedicion(request.getParameter("fechaExpedicion"));
         agente.setCorreo(request.getParameter("correo"));
         agente.setCelular(request.getParameter("celular"));
+        agente.setFechaNacimiento(request.getParameter("fechaNacimiento"));
+        agente.setFechaExpedicion(request.getParameter("fechaExpedicion"));
+        agente.setDireccion(request.getParameter("direccion"));
+        agente.setPassword(request.getParameter("password"));
 
         if ("agregar".equals(action)) {
             agenteDAO.agregar(agente);

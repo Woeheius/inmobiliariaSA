@@ -13,6 +13,26 @@ public class Inmueble {
     private String departamento;
     private String ciudad;
     private String direccion;
+    
+        public Inmueble() {}
+
+    // Constructor con parámetros
+    public Inmueble(int id, String codigo, String descripcion, String tipoInmueble, 
+                    String modalidad, double precio, String estado, int cantidadBanos, 
+                    double tamano, String departamento, String ciudad, String direccion) {
+        this.id = id;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.tipoInmueble = tipoInmueble;
+        this.modalidad = modalidad;
+        this.precio = precio;
+        this.estado = estado;
+        this.cantidadBanos = cantidadBanos;
+        this.tamano = tamano;
+        this.departamento = departamento;
+        this.ciudad = ciudad;
+        this.direccion = direccion;
+    }
 
     // Getters y Setters
     public int getId() { return id; }
