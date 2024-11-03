@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/ClienteController")
 public class ClienteController extends HttpServlet {
@@ -18,17 +19,19 @@ public class ClienteController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        if (action == null) action = "listar";
+
         switch (action) {
             case "listar":
-                request.setAttribute("listaClientes", clienteDAO.listar());
-                request.getRequestDispatcher("views/clientes/listar.jsp").forward(request, response);
+                listarClientes(request, response);
                 break;
             case "registrar":
                 request.getRequestDispatcher("views/clientes/registrar.jsp").forward(request, response);
                 break;
             case "editar":
                 int id = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("cliente", clienteDAO.listarPorId(id));
+                Cliente cliente = clienteDAO.listarPorId(id);
+                request.setAttribute("cliente", cliente);
                 request.getRequestDispatcher("views/clientes/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
@@ -37,9 +40,15 @@ public class ClienteController extends HttpServlet {
                 response.sendRedirect("ClienteController?action=listar");
                 break;
             default:
-                response.sendRedirect("ClienteController?action=listar");
+                listarClientes(request, response);
                 break;
         }
+    }
+
+    private void listarClientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Cliente> listaClientes = clienteDAO.listar();
+        request.setAttribute("listaClientes", listaClientes);
+        request.getRequestDispatcher("views/clientes/ClientePrincipal.jsp").forward(request, response);
     }
 
     @Override

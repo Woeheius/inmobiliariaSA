@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/InmuebleController")
 public class InmuebleController extends HttpServlet {
@@ -18,17 +19,19 @@ public class InmuebleController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        if (action == null) action = "listar";
+
         switch (action) {
             case "listar":
-                request.setAttribute("listaInmuebles", inmuebleDAO.listar());
-                request.getRequestDispatcher("views/inmuebles/listar.jsp").forward(request, response);
+                listarInmuebles(request, response);
                 break;
             case "registrar":
                 request.getRequestDispatcher("views/inmuebles/registrar.jsp").forward(request, response);
                 break;
             case "editar":
                 int id = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("inmueble", inmuebleDAO.listarPorId(id));
+                Inmueble inmueble = inmuebleDAO.listarPorId(id);
+                request.setAttribute("inmueble", inmueble);
                 request.getRequestDispatcher("views/inmuebles/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
@@ -37,9 +40,15 @@ public class InmuebleController extends HttpServlet {
                 response.sendRedirect("InmuebleController?action=listar");
                 break;
             default:
-                response.sendRedirect("InmuebleController?action=listar");
+                listarInmuebles(request, response);
                 break;
         }
+    }
+
+    private void listarInmuebles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Inmueble> listaInmuebles = inmuebleDAO.listar();
+        request.setAttribute("listaInmuebles", listaInmuebles);
+        request.getRequestDispatcher("views/inmuebles/InmueblePrincipal.jsp").forward(request, response);
     }
 
     @Override
