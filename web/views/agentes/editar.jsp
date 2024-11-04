@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="true" %>
 <%
-    if (session.getAttribute("agente") == null) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+if (session.getAttribute("agente") == null) {
+    response.sendRedirect("index.jsp");
+    return;
+}
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,7 +17,6 @@
         body { background-color: #f0f8ff; font-family: Arial, sans-serif; }
         .navbar-custom { background-color: #007bff; }
         .navbar-custom .navbar-brand, .navbar-custom .nav-link { color: white; }
-        .nav-link:hover { color: #d1ecf1; }
         .container { padding: 2rem; max-width: 600px; }
         .btn-primary { background-color: #007bff; border: none; }
     </style>
@@ -33,28 +32,27 @@
 
 <div class="container">
     <h2 class="text-primary mb-4">Editar Agente</h2>
-    <form action="AgenteController?action=actualizar" method="post">
-        <input type="hidden" name="id" value="${agente.id}">
-        
+    <form action="AgenteController" method="post">
+        <input type="hidden" name="action" value="actualizar">
         <div class="form-group">
             <label for="cedula">Cédula</label>
-            <input type="text" id="cedula" name="cedula" class="form-control" value="${agente.cedula}" required>
+            <input type="text" id="cedula" name="cedula" class="form-control" value="${agente.cedula}" readonly>
         </div>
         <div class="form-group">
             <label for="login">Login</label>
             <input type="text" id="login" name="login" class="form-control" value="${agente.login}" required>
         </div>
         <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-control" value="${agente.password}" required>
+        </div>
+        <div class="form-group">
             <label for="nombreCompleto">Nombre Completo</label>
             <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" value="${agente.nombreCompleto}" required>
         </div>
         <div class="form-group">
-            <label for="correo">Correo Electrónico</label>
-            <input type="email" id="correo" name="correo" class="form-control" value="${agente.correo}" required>
-        </div>
-        <div class="form-group">
-            <label for="celular">Celular</label>
-            <input type="text" id="celular" name="celular" class="form-control" value="${agente.celular}" required>
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" value="${agente.direccion}" required>
         </div>
         <div class="form-group">
             <label for="fechaNacimiento">Fecha de Nacimiento</label>
@@ -65,14 +63,14 @@
             <input type="date" id="fechaExpedicion" name="fechaExpedicion" class="form-control" value="${agente.fechaExpedicion}" required>
         </div>
         <div class="form-group">
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" name="direccion" class="form-control" value="${agente.direccion}" required>
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" name="correo" class="form-control" value="${agente.correo}" required>
         </div>
         <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" class="form-control" value="${agente.password}" required>
+            <label for="celular">Celular</label>
+            <input type="text" id="celular" name="celular" class="form-control" value="${agente.celular}" required>
         </div>
-        
+
         <button type="submit" class="btn btn-primary btn-block">Actualizar Agente</button>
     </form>
 </div>

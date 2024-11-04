@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="true" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("agente") == null) {
-        response.sendRedirect("index.jsp");
-        return;
-    }
+if (session.getAttribute("agente") == null) {
+    response.sendRedirect("index.jsp");
+    return;
+}
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,10 +13,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Agentes - Inmobiliaria S.A.</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- CSS en línea -->
     <style>
         body { background-color: #f0f8ff; font-family: Arial, sans-serif; }
@@ -37,21 +38,27 @@
 </nav>
 
 <div class="container mt-4">
-    <h2 class="text-primary mb-4">Listado de Agentes Comerciales</h2>
+    <h2 class="text-primary mb-4">Listado de Agentes</h2>
     <div class="mb-3">
         <a href="AgenteController?action=registrar" class="btn btn-menu">Agregar Nuevo Agente</a>
     </div>
+    <c:if test="${empty listaAgentes}">
+        <p>La lista de agentes está vacía</p>
+    </c:if>
+    <c:if test="${not empty listaAgentes}">
+        <p>Número de agentes: ${listaAgentes.size()}</p>
+    </c:if>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Cédula</th>
                 <th>Login</th>
                 <th>Nombre Completo</th>
-                <th>Correo Electrónico</th>
-                <th>Celular</th>
+                <th>Dirección</th>
                 <th>Fecha de Nacimiento</th>
                 <th>Fecha de Expedición</th>
-                <th>Dirección</th>
+                <th>Correo</th>
+                <th>Celular</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -61,14 +68,14 @@
                     <td>${agente.cedula}</td>
                     <td>${agente.login}</td>
                     <td>${agente.nombreCompleto}</td>
-                    <td>${agente.correo}</td>
-                    <td>${agente.celular}</td>
+                    <td>${agente.direccion}</td>
                     <td>${agente.fechaNacimiento}</td>
                     <td>${agente.fechaExpedicion}</td>
-                    <td>${agente.direccion}</td>
+                    <td>${agente.correo}</td>
+                    <td>${agente.celular}</td>
                     <td>
-                        <a href="AgenteController?action=editar&id=${agente.cedula}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="AgenteController?action=eliminar&id=${agente.cedula}" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="AgenteController?action=editar&cedula=${agente.cedula}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="AgenteController?action=eliminar&cedula=${agente.cedula}" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este agente?');">Eliminar</a>
                     </td>
                 </tr>
             </c:forEach>

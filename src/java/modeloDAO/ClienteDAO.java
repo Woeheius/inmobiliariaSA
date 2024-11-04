@@ -1,4 +1,3 @@
-// Archivo: src/java/modeloDAO/ClienteDAO.java
 package modeloDAO;
 
 import modeloDTO.Cliente;

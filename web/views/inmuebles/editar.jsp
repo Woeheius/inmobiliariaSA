@@ -32,11 +32,11 @@ if (session.getAttribute("agente") == null) {
 
 <div class="container">
     <h2 class="text-primary mb-4">Editar Inmueble</h2>
-    <form action="InmuebleController?action=actualizar" method="post">
-        <input type="hidden" name="id" value="${inmueble.id}">
+    <form action="InmuebleController" method="post">
+        <input type="hidden" name="action" value="actualizar">
         <div class="form-group">
             <label for="codigo">Código</label>
-            <input type="text" id="codigo" name="codigo" class="form-control" value="${inmueble.codigo}" required>
+            <input type="text" id="codigo" name="codigo" class="form-control" value="${inmueble.codigo}" readonly>
         </div>
         <div class="form-group">
             <label for="descripcion">Descripción</label>

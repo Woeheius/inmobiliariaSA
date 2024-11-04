@@ -15,6 +15,7 @@ public class ContratoDAO {
     private void inicializarDatosPrueba() {
         listaContratosPrueba = new ArrayList<>();
         
+        // Añadimos algunos contratos de prueba
         Contrato contrato1 = new Contrato("C001", "Contrato de Venta", "Venta", "2023-01-01", "2024-01-01", 100000.0, 5.0);
         Contrato contrato2 = new Contrato("C002", "Contrato de Alquiler", "Alquiler", "2023-02-01", "2024-02-01", 5000.0, 2.0);
         
@@ -45,6 +46,9 @@ public class ContratoDAO {
     }
 
     public Contrato listarPorCodigo(String codigo) {
-        return listaContratosPrueba.stream().filter(c -> c.getCodigo().equals(codigo)).findFirst().orElse(null);
+        return listaContratosPrueba.stream()
+                .filter(c -> c.getCodigo().equals(codigo))
+                .findFirst()
+                .orElse(null);
     }
 }

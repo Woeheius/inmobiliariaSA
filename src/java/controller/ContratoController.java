@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/ContratoController")
 public class ContratoController extends HttpServlet {
@@ -18,28 +19,36 @@ public class ContratoController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        if (action == null) action = "listar";
+
         switch (action) {
             case "listar":
-                request.setAttribute("listaContratos", contratoDAO.listar());
-                request.getRequestDispatcher("views/contratos/ContratoPrincipal.jsp").forward(request, response);
+                listarContratos(request, response);
                 break;
             case "registrar":
                 request.getRequestDispatcher("views/contratos/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                String id = request.getParameter("codigo");
-                request.setAttribute("contrato", contratoDAO.listarPorCodigo(id));
+                String codigo = request.getParameter("codigo");
+                Contrato contrato = contratoDAO.listarPorCodigo(codigo);
+                request.setAttribute("contrato", contrato);
                 request.getRequestDispatcher("views/contratos/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                String codigoeliminar = request.getParameter("codigo");
-                contratoDAO.eliminar(codigoeliminar);
+                String codigoEliminar = request.getParameter("codigo");
+                contratoDAO.eliminar(codigoEliminar);
                 response.sendRedirect("ContratoController?action=listar");
                 break;
             default:
-                response.sendRedirect("ContratoController?action=listar");
+                listarContratos(request, response);
                 break;
         }
+    }
+
+    private void listarContratos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Contrato> listaContratos = contratoDAO.listar();
+        request.setAttribute("listaContratos", listaContratos);
+        request.getRequestDispatcher("views/contratos/ContratoPrincipal.jsp").forward(request, response);
     }
 
     @Override
@@ -58,7 +67,6 @@ public class ContratoController extends HttpServlet {
         if ("agregar".equals(action)) {
             contratoDAO.agregar(contrato);
         } else if ("actualizar".equals(action)) {
-            contrato.setCodigo(request.getParameter("codigo"));
             contratoDAO.actualizar(contrato);
         }
 

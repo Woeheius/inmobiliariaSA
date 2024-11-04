@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="true" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 if (session.getAttribute("agente") == null) {
     response.sendRedirect("index.jsp");
@@ -41,6 +42,12 @@ if (session.getAttribute("agente") == null) {
     <div class="mb-3">
         <a href="InmuebleController?action=registrar" class="btn btn-menu">Agregar Nuevo Inmueble</a>
     </div>
+    <c:if test="${empty listaInmuebles}">
+        <p>La lista de inmuebles está vacía</p>
+    </c:if>
+    <c:if test="${not empty listaInmuebles}">
+        <p>Número de inmuebles: ${listaInmuebles.size()}</p>
+    </c:if>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -73,8 +80,8 @@ if (session.getAttribute("agente") == null) {
                     <td>${inmueble.ciudad}</td>
                     <td>${inmueble.direccion}</td>
                     <td>
-                        <a href="InmuebleController?action=editar&id=${inmueble.codigo}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="InmuebleController?action=eliminar&id=${inmueble.codigo}" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="InmuebleController?action=editar&codigo=${inmueble.codigo}" class="btn btn-warning btn-sm">Editar</a>
+    <a href="InmuebleController?action=eliminar&codigo=${inmueble.codigo}" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este inmueble?');">Eliminar</a>
                     </td>
                 </tr>
             </c:forEach>
