@@ -67,8 +67,8 @@
                     <td>${agente.fechaExpedicion}</td>
                     <td>${agente.direccion}</td>
                     <td>
-                        <a href="AgenteController?action=editar&id=${agente.id}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="AgenteController?action=eliminar&id=${agente.id}" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="AgenteController?action=editar&id=${agente.cedula}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="AgenteController?action=eliminar&id=${agente.cedula}" class="btn btn-danger btn-sm">Eliminar</a>
                     </td>
                 </tr>
             </c:forEach>

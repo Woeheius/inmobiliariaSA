@@ -27,12 +27,12 @@ public class PropietarioController extends HttpServlet {
                 request.getRequestDispatcher("views/propietarios/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                int id = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("propietario", propietarioDAO.listarPorId(id));
+                String id = request.getParameter("id");
+                request.setAttribute("propietario", propietarioDAO.listarPorCedula(id));
                 request.getRequestDispatcher("views/propietarios/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                String idEliminar = request.getParameter("id");
                 propietarioDAO.eliminar(idEliminar);
                 response.sendRedirect("PropietarioController?action=listar");
                 break;

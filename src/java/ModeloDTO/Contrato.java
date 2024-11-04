@@ -1,7 +1,6 @@
 package modeloDTO;
 
 public class Contrato {
-    private int id;
     private String codigo;
     private String descripcion;
     private String tipoContrato; // Venta o Alquiler
@@ -13,10 +12,9 @@ public class Contrato {
         public Contrato() {}
 
     // Constructor con parámetros
-    public Contrato(int id, String codigo, String descripcion, String tipoContrato, 
+    public Contrato(String codigo, String descripcion, String tipoContrato, 
                     String fechaCreacion, String fechaExpiracion, double valor, 
                     double porcentajeComision) {
-        this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.tipoContrato = tipoContrato;
@@ -27,8 +25,6 @@ public class Contrato {
     }
 
     // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
 
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }

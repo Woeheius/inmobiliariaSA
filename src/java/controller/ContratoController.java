@@ -21,19 +21,19 @@ public class ContratoController extends HttpServlet {
         switch (action) {
             case "listar":
                 request.setAttribute("listaContratos", contratoDAO.listar());
-                request.getRequestDispatcher("views/contratos/listar.jsp").forward(request, response);
+                request.getRequestDispatcher("views/contratos/ContratoPrincipal.jsp").forward(request, response);
                 break;
             case "registrar":
                 request.getRequestDispatcher("views/contratos/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                int id = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("contrato", contratoDAO.listarPorId(id));
+                String id = request.getParameter("codigo");
+                request.setAttribute("contrato", contratoDAO.listarPorCodigo(id));
                 request.getRequestDispatcher("views/contratos/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
-                contratoDAO.eliminar(idEliminar);
+                String codigoeliminar = request.getParameter("codigo");
+                contratoDAO.eliminar(codigoeliminar);
                 response.sendRedirect("ContratoController?action=listar");
                 break;
             default:
@@ -58,7 +58,7 @@ public class ContratoController extends HttpServlet {
         if ("agregar".equals(action)) {
             contratoDAO.agregar(contrato);
         } else if ("actualizar".equals(action)) {
-            contrato.setId(Integer.parseInt(request.getParameter("id")));
+            contrato.setCodigo(request.getParameter("codigo"));
             contratoDAO.actualizar(contrato);
         }
 

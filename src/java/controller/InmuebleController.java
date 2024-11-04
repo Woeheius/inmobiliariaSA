@@ -29,13 +29,13 @@ public class InmuebleController extends HttpServlet {
                 request.getRequestDispatcher("views/inmuebles/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                int id = Integer.parseInt(request.getParameter("id"));
-                Inmueble inmueble = inmuebleDAO.listarPorId(id);
+                String id = request.getParameter("codigo");
+                Inmueble inmueble = inmuebleDAO.listarPorCodigo(id);
                 request.setAttribute("inmueble", inmueble);
                 request.getRequestDispatcher("views/inmuebles/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                String idEliminar = request.getParameter("codigo");
                 inmuebleDAO.eliminar(idEliminar);
                 response.sendRedirect("InmuebleController?action=listar");
                 break;
@@ -71,7 +71,7 @@ public class InmuebleController extends HttpServlet {
         if ("agregar".equals(action)) {
             inmuebleDAO.agregar(inmueble);
         } else if ("actualizar".equals(action)) {
-            inmueble.setId(Integer.parseInt(request.getParameter("id")));
+            inmueble.setCodigo(request.getParameter("codigo"));
             inmuebleDAO.actualizar(inmueble);
         }
 

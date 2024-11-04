@@ -29,14 +29,14 @@ public class ClienteController extends HttpServlet {
                 request.getRequestDispatcher("views/clientes/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                int id = Integer.parseInt(request.getParameter("id"));
-                Cliente cliente = clienteDAO.listarPorId(id);
+                String cedula = request.getParameter("cedula");
+                Cliente cliente = clienteDAO.listarPorCedula(cedula);
                 request.setAttribute("cliente", cliente);
                 request.getRequestDispatcher("views/clientes/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
-                clienteDAO.eliminar(idEliminar);
+                String cedulaEliminar = request.getParameter("cedula");
+                clienteDAO.eliminar(cedulaEliminar);
                 response.sendRedirect("ClienteController?action=listar");
                 break;
             default:
@@ -68,7 +68,6 @@ public class ClienteController extends HttpServlet {
         if ("agregar".equals(action)) {
             clienteDAO.agregar(cliente);
         } else if ("actualizar".equals(action)) {
-            cliente.setId(Integer.parseInt(request.getParameter("id")));
             clienteDAO.actualizar(cliente);
         }
 

@@ -1,7 +1,6 @@
 package modeloDTO;
 
 public class Agente {
-    private int id;
     private String login;
     private String password;
     private String cedula;
@@ -15,9 +14,8 @@ public class Agente {
     public Agente() {}
 
     // Constructor con parámetros
-    public Agente(int id, String login, String password, String cedula, String nombreCompleto, String direccion, 
+    public Agente(String login, String password, String cedula, String nombreCompleto, String direccion, 
                   String fechaNacimiento, String fechaExpedicion, String correo, String celular) {
-        this.id = id;
         this.login = login;
         this.password = password;
         this.cedula = cedula;
@@ -31,9 +29,6 @@ public class Agente {
 
 
     // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
 

@@ -1,7 +1,6 @@
 package modeloDTO;
 
 public class Cliente {
-    private int id;
     private String cedula;
     private String nombreCompleto;
     private String direccion;
@@ -14,10 +13,9 @@ public class Cliente {
         public Cliente() {}
 
     // Constructor con parámetros
-    public Cliente(int id, String cedula, String nombreCompleto, String direccion, 
+    public Cliente(String cedula, String nombreCompleto, String direccion, 
                    String fechaNacimiento, String fechaExpedicion, String correo,
                    String numeroContacto1, String numeroContacto2) {
-        this.id = id;
         this.cedula = cedula;
         this.nombreCompleto = nombreCompleto;
         this.direccion = direccion;
@@ -29,8 +27,6 @@ public class Cliente {
     }
 
     // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
 
     public String getCedula() { return cedula; }
     public void setCedula(String cedula) { this.cedula = cedula; }

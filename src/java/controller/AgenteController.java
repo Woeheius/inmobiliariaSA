@@ -29,14 +29,14 @@ public class AgenteController extends HttpServlet {
                 request.getRequestDispatcher("views/agentes/registrar.jsp").forward(request, response);
                 break;
             case "editar":
-                int id = Integer.parseInt(request.getParameter("id"));
-                Agente agente = agenteDAO.listarPorId(id);
+                String cedula = request.getParameter("cedula");
+                Agente agente = agenteDAO.listarPorCedula(cedula);
                 request.setAttribute("agente", agente);
                 request.getRequestDispatcher("views/agentes/editar.jsp").forward(request, response);
                 break;
             case "eliminar":
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
-                agenteDAO.eliminar(idEliminar);
+                String cedulaEliminar = request.getParameter("cedula");
+                agenteDAO.eliminar(cedulaEliminar);
                 response.sendRedirect("AgenteController?action=listar");
                 break;
             default:
@@ -69,7 +69,6 @@ public class AgenteController extends HttpServlet {
         if ("agregar".equals(action)) {
             agenteDAO.agregar(agente);
         } else if ("actualizar".equals(action)) {
-            agente.setId(Integer.parseInt(request.getParameter("id")));
             agenteDAO.actualizar(agente);
         }
 
