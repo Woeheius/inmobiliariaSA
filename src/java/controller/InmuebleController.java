@@ -43,13 +43,11 @@ public class InmuebleController extends HttpServlet {
                     response.sendRedirect("InmuebleController?action=listar");
                 }
                 break;
-            case "eliminar":
-                String codigoEliminar = request.getParameter("codigo");
-                System.out.println("Eliminando inmueble con código: " + codigoEliminar);
-                boolean eliminado = inmuebleDAO.eliminar(codigoEliminar);
-                System.out.println("Resultado de eliminación: " + eliminado);
-                response.sendRedirect("InmuebleController?action=listar");
-                break;
+case "eliminar":
+    String codigoEliminar = request.getParameter("codigo");
+    inmuebleDAO.eliminar(codigoEliminar);
+    response.sendRedirect("InmuebleController?action=listar");
+    break;
             default:
                 System.out.println("Acción no reconocida, redirigiendo a listar");
                 listarInmuebles(request, response);

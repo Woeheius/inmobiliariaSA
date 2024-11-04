@@ -43,13 +43,11 @@ public class AgenteController extends HttpServlet {
                     response.sendRedirect("AgenteController?action=listar");
                 }
                 break;
-            case "eliminar":
-                String cedulaEliminar = request.getParameter("cedula");
-                System.out.println("Eliminando agente con cédula: " + cedulaEliminar);
-                boolean eliminado = agenteDAO.eliminar(cedulaEliminar);
-                System.out.println("Resultado de eliminación: " + eliminado);
-                response.sendRedirect("AgenteController?action=listar");
-                break;
+case "eliminar":
+    String cedulaEliminar = request.getParameter("cedula");
+    agenteDAO.eliminar(cedulaEliminar);
+    response.sendRedirect("AgenteController?action=listar");
+    break;
             default:
                 System.out.println("Acción no reconocida, redirigiendo a listar");
                 listarAgentes(request, response);

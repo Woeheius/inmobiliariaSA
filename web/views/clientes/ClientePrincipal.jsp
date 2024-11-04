@@ -70,11 +70,11 @@
                                    class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
-                                <a href="ClienteController?action=eliminar&cedula=${cliente.cedula}" 
-                                   class="btn btn-sm btn-danger" 
-                                   onclick="return confirm('¿Está seguro de eliminar este cliente?')">
-                                    <i class="fas fa-trash"></i> Eliminar
-                                </a>
+<a href="ClienteController?action=eliminar&cedula=${cliente.cedula}" 
+   class="btn btn-sm btn-danger" 
+   onclick="return confirm('¿Está seguro de eliminar este cliente?')">
+    <i class="fas fa-trash"></i> Eliminar
+</a>
                             </div>
                         </td>
                     </tr>

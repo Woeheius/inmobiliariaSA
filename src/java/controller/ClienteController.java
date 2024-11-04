@@ -34,11 +34,11 @@ public class ClienteController extends HttpServlet {
                 request.setAttribute("cliente", cliente);
                 request.getRequestDispatcher("views/clientes/editar.jsp").forward(request, response);
                 break;
-            case "eliminar":
-                String cedulaEliminar = request.getParameter("cedula");
-                clienteDAO.eliminar(cedulaEliminar);
-                response.sendRedirect("ClienteController?action=listar");
-                break;
+case "eliminar":
+    String cedulaEliminar = request.getParameter("cedula");
+    clienteDAO.eliminar(cedulaEliminar);
+    response.sendRedirect("ClienteController?action=listar");
+    break;
             default:
                 listarClientes(request, response);
                 break;

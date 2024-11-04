@@ -34,11 +34,11 @@ public class ContratoController extends HttpServlet {
                 request.setAttribute("contrato", contrato);
                 request.getRequestDispatcher("views/contratos/editar.jsp").forward(request, response);
                 break;
-            case "eliminar":
-                String codigoEliminar = request.getParameter("codigo");
-                contratoDAO.eliminar(codigoEliminar);
-                response.sendRedirect("ContratoController?action=listar");
-                break;
+case "eliminar":
+    String codigoEliminar = request.getParameter("codigo");
+    contratoDAO.eliminar(codigoEliminar);
+    response.sendRedirect("ContratoController?action=listar");
+    break;
             default:
                 listarContratos(request, response);
                 break;
