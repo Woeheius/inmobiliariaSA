@@ -1,20 +1,28 @@
 package modeloDTO;
 
 public class Contrato {
+    // Campos existentes
     private String codigo;
     private String descripcion;
-    private String tipoContrato; // Venta o Alquiler
+    private String tipoContrato;
     private String fechaCreacion;
     private String fechaExpiracion;
     private double valor;
     private double porcentajeComision;
     
-        public Contrato() {}
+    // Nuevos campos para relaciones
+    private String codigoInmueble;
+    private String cedulaCliente;
+    private String cedulaAgente;
 
-    // Constructor con parámetros
+    // Constructor vacío
+    public Contrato() {}
+
+    // Constructor completo
     public Contrato(String codigo, String descripcion, String tipoContrato, 
-                    String fechaCreacion, String fechaExpiracion, double valor, 
-                    double porcentajeComision) {
+                   String fechaCreacion, String fechaExpiracion, double valor, 
+                   double porcentajeComision, String codigoInmueble, 
+                   String cedulaCliente, String cedulaAgente) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.tipoContrato = tipoContrato;
@@ -22,10 +30,12 @@ public class Contrato {
         this.fechaExpiracion = fechaExpiracion;
         this.valor = valor;
         this.porcentajeComision = porcentajeComision;
+        this.codigoInmueble = codigoInmueble;
+        this.cedulaCliente = cedulaCliente;
+        this.cedulaAgente = cedulaAgente;
     }
 
-    // Getters y Setters
-
+    // Getters y Setters existentes
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
 
@@ -46,4 +56,14 @@ public class Contrato {
 
     public double getPorcentajeComision() { return porcentajeComision; }
     public void setPorcentajeComision(double porcentajeComision) { this.porcentajeComision = porcentajeComision; }
+
+    // Nuevos Getters y Setters para las relaciones
+    public String getCodigoInmueble() { return codigoInmueble; }
+    public void setCodigoInmueble(String codigoInmueble) { this.codigoInmueble = codigoInmueble; }
+
+    public String getCedulaCliente() { return cedulaCliente; }
+    public void setCedulaCliente(String cedulaCliente) { this.cedulaCliente = cedulaCliente; }
+
+    public String getCedulaAgente() { return cedulaAgente; }
+    public void setCedulaAgente(String cedulaAgente) { this.cedulaAgente = cedulaAgente; }
 }
