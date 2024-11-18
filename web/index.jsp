@@ -35,14 +35,35 @@
             font-size: 1.2rem;
         }
         .login-container {
-            position: relative;
+            position: absolute; /* Cambiar a posición absoluta */
             z-index: 1000;
-            margin-top: 100px;
+            top: 50%; /* Centrar verticalmente */
+            right: 40px; /* Alinear a la derecha */
+            transform: translate(0, -50%); /* Ajustar para centrar verticalmente */
             background-color: rgba(255, 255, 255, 0.5);
             border-radius: 10px;
             padding: 30px;
             transition: background-color 0.5s; /* Transición suave */
+            max-width: 600px; /* Mantener el tamaño original */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
         }
+        .register-container {
+            position: absolute; /* Cambiar a posición absoluta para centrar */
+            z-index: 1000;
+            top: 50%; /* Centrar verticalmente */
+            left: 50%; /* Centrar horizontalmente */
+            transform: translate(-50%, -50%); /* Ajustar para centrar */
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            transition: background-color 0.5s; /* Transición suave */
+            width: 100%; /* Ancho completo */
+            max-width: 600px; /* Aumentar el tamaño máximo */
+            height: auto; /* Permitir que el formulario sea más alto */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
+            display: none; /* Ocultar inicialmente */
+        }
+        /* Resto del CSS sin cambios */
         .form-control {
             background-color: rgba(255, 255, 255, 0.5);
             border: none;
@@ -96,7 +117,7 @@
             background-size: cover;
             background-position: center;
         }
-        body.dark-mode .login-container {
+        body.dark-mode .login-container, body.dark-mode .register-container {
             background-color: rgba(50, 50, 50, 0.7);
         }
         body.dark-mode .form-control {
@@ -106,7 +127,7 @@
         body.dark-mode .form-control::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
- body.dark-mode .navbar-brand, body.dark-mode .nav-link {
+        body.dark-mode .navbar-brand, body.dark-mode .nav-link {
             color: white !important;
         }
         body.dark-mode .footer {
@@ -135,17 +156,20 @@
                     <li class="nav-item">
                         <button class="nav-link" id="dark-mode-btn">Modo Oscuro</button>
                     </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="register-btn">Registrarse</button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-md-6 col-lg-4">
+        <div class="row justify-content-center align-items-center" style="height: calc(100vh - 100px);"> <!-- Ajustar altura para centrar -->
+            <div class="col-md-8">
                 <div class="login-container">
                     <h2 class="login-title mb-4">Iniciar Sesión</h2>
-                    <form action="LoginController" method="POST">
+                    <form id="login-form" action="LoginController" method="POST">
                         <div class="mb-3">
                             <input type="text" class="form-control" name="username" placeholder="Usuario" required>
                         </div>
@@ -160,6 +184,42 @@
                     <% if (request.getAttribute("errorMessage") != null) { %>
                         <p class="text-danger text-center mt-3"><%= request.getAttribute("errorMessage") %></p>
                     <% } %>
+                </div>
+
+                <!-- Formulario de registro oculto inicialmente -->
+                <div class="register-container">
+                    <h2 class="login-title mb-4">Registrarse</h2>
+                    <form id="register-form" action="ClienteController" method=" POST">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="text" class="form-control" name="cedula" placeholder="Cédula" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" class="form-control" name="nombreCompleto" placeholder="Nombre Completo" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" class="form-control" name="direccion" placeholder="Dirección" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="date" class="form-control" name="fechaNacimiento" placeholder="Fecha de Nacimiento" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="date" class="form-control" name="fechaExpedicion" placeholder="Fecha de Expedición" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="email" class="form-control" name="correo" placeholder="Correo Electrónico" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="tel" class="form-control" name="numeroContacto1" placeholder="Número de Contacto 1" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="tel" class="form-control" name="numeroContacto2" placeholder="Número de Contacto 2 (opcional)">
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-block text-white">Registrarse</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -197,23 +257,41 @@
         });
 
         const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password ');
+        const password = document.querySelector('#password');
 
         togglePassword.addEventListener('click', function (e) {
-            const type = password.getAttribute('type') === 'password ' ? 'text' : 'password';
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
             this.classList.toggle('fa-eye-slash');
         });
 
         const darkModeBtn = document.querySelector('#dark-mode-btn');
-
         darkModeBtn.addEventListener('click', function (e) {
             document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                this.textContent = 'Modo Claro';
+            this .textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Oscuro';
+        });
+
+        const registerBtn = document.querySelector('#register-btn');
+        const loginContainer = document.querySelector('.login-container');
+        const registerContainer = document.querySelector('.register-container');
+
+        registerBtn.addEventListener('click', function () {
+            if (registerContainer.style.display === 'none') {
+                loginContainer.style.display = 'none';
+                registerContainer.style.display = 'block';
+                registerBtn.textContent = 'Iniciar Sesión';
             } else {
-                this.textContent = 'Modo Oscuro';
+                registerContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
+                registerBtn.textContent = 'Registrarse';
             }
+        });
+
+        const loginForm = document.querySelector('#login-form');
+        loginForm.addEventListener('submit', function () {
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            registerBtn.textContent = 'Registrarse';
         });
     </script>
 </body>

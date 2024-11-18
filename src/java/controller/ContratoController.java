@@ -16,9 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @WebServlet("/ContratoController")
 public class ContratoController extends HttpServlet {
@@ -49,6 +46,9 @@ public class ContratoController extends HttpServlet {
             case "reporte":
                 generarReporte(request, response);
                 break;
+            case "vistaContratos": // Nueva acción para redirigir a la vista de contratos
+                redirigirVistaContratos(request, response);
+                break;
             default:
                 listarContratos(request, response);
                 break;
@@ -58,7 +58,7 @@ public class ContratoController extends HttpServlet {
     private void listarContratos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Contrato> listaContratos = contratoDAO.listar();
         request.setAttribute("listaContratos", listaContratos);
-        request.getRequestDispatcher("views/contratos/ContratoPrincipal.jsp").forward(request, response);
+        request.getRequestDispatcher("views/contratos/ContratoController.jsp").forward(request, response);
     }
 
     private void cargarDatosParaRegistro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -112,7 +112,7 @@ public class ContratoController extends HttpServlet {
                 String cedulaCliente = request.getParameter("cedulaCliente");
                 reporteContratos = contratoDAO.listarPorCliente(cedulaCliente);
                 break;
-            case "reportePorInmueble":
+ case "reportePorInmueble":
                 String codigoInmueble = request.getParameter("codigoInmueble");
                 reporteContratos = contratoDAO.listarPorInmueble(codigoInmueble);
                 break;
@@ -135,6 +135,10 @@ public class ContratoController extends HttpServlet {
         }
 
         request.getRequestDispatcher("views/contratos/reporteContratos.jsp").forward(request, response);
+    }
+
+    private void redirigirVistaContratos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("views/contratos/contratoController.jsp").forward(request, response);
     }
 
     @Override

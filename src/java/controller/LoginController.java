@@ -1,7 +1,9 @@
 package controller;
 
 import modeloDAO.AgenteDAO;
+import modeloDAO.ClienteDAO;
 import modeloDTO.Agente;
+import modeloDTO.Cliente;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,24 +16,35 @@ import java.io.IOException;
 @WebServlet("/LoginController")
 public class LoginController extends HttpServlet {
     private AgenteDAO agenteDAO = new AgenteDAO();
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String login = request.getParameter("username");
-    String password = request.getParameter("password");
+    private ClienteDAO clienteDAO = new ClienteDAO();
 
-    // Verificar usuario maestro "admin"
-    if ("admin".equals(login) && "admin".equals(password)) {
-        HttpSession session = request.getSession();
-        Agente admin = new Agente();
-        admin.setLogin("admin");
-        admin.setNombreCompleto("Administrador");
-        session.setAttribute("agente", admin);
-        response.sendRedirect("menuAgente.jsp");
-        return;
-    } else {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String login = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Verificar usuario maestro "admin"
+        if ("admin".equals(login) && "admin".equals(password)) {
+            HttpSession session = request.getSession();
+            Agente admin = new Agente();
+            admin.setLogin("admin");
+            admin.setNombreCompleto("Administrador");
+            session.setAttribute("agente", admin);
+            response.sendRedirect("menuAgente.jsp");
+            return;
+        }
+
+        // Verificar si es un cliente
+        Cliente cliente = clienteDAO.listarPorCedula(login);
+        if (cliente != null && cliente.getCedula().equals(password)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("cliente", cliente);
+            response.sendRedirect("menuCliente.jsp");
+            return;
+        }
+
+        // Si no se encuentra el usuario
         request.setAttribute("errorMessage", "Usuario o contraseña incorrectos");
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
-}
-
 }

@@ -43,11 +43,14 @@ public class InmuebleController extends HttpServlet {
                     response.sendRedirect("InmuebleController?action=listar");
                 }
                 break;
-case "eliminar":
-    String codigoEliminar = request.getParameter("codigo");
-    inmuebleDAO.eliminar(codigoEliminar);
-    response.sendRedirect("InmuebleController?action=listar");
-    break;
+            case "eliminar":
+                String codigoEliminar = request.getParameter("codigo");
+                inmuebleDAO.eliminar(codigoEliminar);
+                response.sendRedirect("InmuebleController?action=listar");
+                break;
+            case "vistaInmuebles": // Nueva acción para redirigir a la vista de inmuebles
+                redirigirVistaInmuebles(request, response);
+                break;
             default:
                 System.out.println("Acción no reconocida, redirigiendo a listar");
                 listarInmuebles(request, response);
@@ -61,6 +64,10 @@ case "eliminar":
         System.out.println("Cantidad de inmuebles en la lista: " + (listaInmuebles != null ? listaInmuebles.size() : "null"));
         request.setAttribute("listaInmuebles", listaInmuebles);
         request.getRequestDispatcher("views/inmuebles/InmueblePrincipal.jsp").forward(request, response);
+    }
+
+    private void redirigirVistaInmuebles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("views/inmuebles/inmuebleController.jsp").forward(request, response);
     }
 
     @Override
