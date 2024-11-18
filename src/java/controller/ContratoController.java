@@ -58,7 +58,7 @@ public class ContratoController extends HttpServlet {
     private void listarContratos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Contrato> listaContratos = contratoDAO.listar();
         request.setAttribute("listaContratos", listaContratos);
-        request.getRequestDispatcher("views/contratos/ContratoController.jsp").forward(request, response);
+        request.getRequestDispatcher("views/contratos/ContratoPrincipal.jsp").forward(request, response);
     }
 
     private void cargarDatosParaRegistro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

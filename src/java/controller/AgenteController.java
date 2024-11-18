@@ -82,7 +82,7 @@ case "eliminar":
 
             if ("agregar".equals(action)) {
                 System.out.println("Agregando nuevo agente con cédula: " + agente.getCedula());
-                boolean agregado = agenteDAO.agregar(agente);
+                boolean agregado = agenteDAO.insertar(agente);
                 System.out.println("Resultado de agregar: " + agregado);
             } else if ("actualizar".equals(action)) {
                 System.out.println("Actualizando agente con cédula: " + agente.getCedula());
