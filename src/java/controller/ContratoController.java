@@ -43,9 +43,6 @@ public class ContratoController extends HttpServlet {
             case "eliminar":
                 eliminarContrato(request, response);
                 break;
-            case "reporte":
-                generarReporte(request, response);
-                break;
             case "vistaContratos": // Nueva acción para redirigir a la vista de contratos
                 redirigirVistaContratos(request, response);
                 break;
@@ -93,48 +90,6 @@ public class ContratoController extends HttpServlet {
         String codigoEliminar = request.getParameter("codigo");
         contratoDAO.eliminar(codigoEliminar);
         response.sendRedirect("ContratoController?action=listar");
-    }
-
-    private void generarReporte(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String tipoReporte = request.getParameter("tipoReporte");
-        String fechaInicio = request.getParameter("fechaInicio");
-        String fechaFin = request.getParameter("fechaFin");
-
-        List<Contrato> reporteContratos = null;
-        String mensaje = "";
-
-        switch (tipoReporte) {
-            case "reportePorAgente":
-                String cedulaAgente = request.getParameter("cedulaAgente");
-                reporteContratos = contratoDAO.listarPorAgente(cedulaAgente);
-                break;
-            case "reportePorCliente":
-                String cedulaCliente = request.getParameter("cedulaCliente");
-                reporteContratos = contratoDAO.listarPorCliente(cedulaCliente);
-                break;
- case "reportePorInmueble":
-                String codigoInmueble = request.getParameter("codigoInmueble");
-                reporteContratos = contratoDAO.listarPorInmueble(codigoInmueble);
-                break;
-            case "reportePorTipoYFecha":
-                String tipoContrato = request.getParameter("tipoContrato");
-                reporteContratos = contratoDAO.listarPorTipoYFecha(tipoContrato, fechaInicio, fechaFin);
-                break;
-        }
-
-        if (reporteContratos != null && !reporteContratos.isEmpty()) {
-            double valorTotal = reporteContratos.stream().mapToDouble(Contrato::getValor).sum();
-            double promedioValor = valorTotal / reporteContratos.size();
-
-            request.setAttribute("reporteContratos", reporteContratos);
-            request.setAttribute("valorTotal", String.format("%.2f", valorTotal));
-            request.setAttribute("promedioValor", String.format("%.2f", promedioValor));
-        } else {
-            mensaje = "No se encontraron contratos para los criterios seleccionados.";
-            request.setAttribute("mensaje", mensaje);
-        }
-
-        request.getRequestDispatcher("views/contratos/reporteContratos.jsp").forward(request, response);
     }
 
     private void redirigirVistaContratos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

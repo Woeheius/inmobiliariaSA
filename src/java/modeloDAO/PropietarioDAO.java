@@ -1,71 +1,107 @@
 package modeloDAO;
 
+import config.Conexion;
 import modeloDTO.Propietario;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PropietarioDAO {
-    private static List<Propietario> listaPropietariosPrueba = new ArrayList<>();
-    private static boolean datosInicializados = false;
+    private Connection conexion;
 
     public PropietarioDAO() {
-        if (!datosInicializados) {
-            inicializarDatosPrueba();
-            datosInicializados = true;
-        }
-    }
-
-private void inicializarDatosPrueba() {
-        Propietario propietario1 = new Propietario();
-        propietario1.setCedula("123456789");
-        propietario1.setNombreCompleto("Juan Pérez");
-        propietario1.setDireccion("Calle 123");
-        propietario1.setFechaNacimiento("1980-01-01");
-        propietario1.setFechaExpedicion("2000-01-01");
-        propietario1.setCorreo("juan@email.com");
-        propietario1.setNumeroContacto1("1234567");
-        propietario1.setNumeroContacto2("7654321");
-
-        Propietario propietario2 = new Propietario();
-        propietario2.setCedula("987654321");
-        propietario2.setNombreCompleto("María López");
-        propietario2.setDireccion("Avenida 456");
-        propietario2.setFechaNacimiento("1985-05-05");
-        propietario2.setFechaExpedicion("2005-05-05");
-        propietario2.setCorreo("maria@email.com");
-        propietario2.setNumeroContacto1("9876543");
-        propietario2.setNumeroContacto2("3456789");
-        
-        listaPropietariosPrueba.add(propietario1);
-        listaPropietariosPrueba.add(propietario2);
+        Conexion conn = new Conexion();
+        this.conexion = conn.getConexion();
     }
 
     public List<Propietario> listar() {
-        return listaPropietariosPrueba;
+        List<Propietario> listaPropietarios = new ArrayList<>();
+        String sql = "SELECT * FROM propietario";
+        try (PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Propietario propietario = new Propietario();
+                propietario.setCedula(String.valueOf(rs.getInt("cedula_propietario")));
+                propietario.setNombreCompleto(rs.getString("nombre_propietario"));
+                propietario.setCorreo(rs.getString("correoelectronico_propietario"));
+                propietario.setDireccion(rs.getString("direccion_propietario"));
+                propietario.setFechaExpedicion(rs.getString("fechadexpedicion_propietario"));
+                propietario.setNumeroContacto1(String.valueOf(rs.getInt("contacto1_propietario")));
+                propietario.setNumeroContacto2(String.valueOf(rs.getInt("contacto2_propietario")));
+                listaPropietarios.add(propietario);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaPropietarios;
     }
 
     public boolean agregar(Propietario propietario) {
-        return listaPropietariosPrueba.add(propietario);
+        String sql = "INSERT INTO propietario (cedula_propietario, nombre_propietario, correoelectronico_propietario, direccion_propietario, fechadexpedicion_propietario, contacto1_propietario, contacto2_propietario) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(propietario.getCedula()));
+            ps.setString(2, propietario.getNombreCompleto());
+            ps.setString(3, propietario.getCorreo());
+            ps.setString(4, propietario.getDireccion());
+            ps.setString(5, propietario.getFechaExpedicion());
+            ps.setInt(6, Integer.parseInt(propietario.getNumeroContacto1()));
+            ps.setInt(7, Integer.parseInt(propietario.getNumeroContacto2()));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean actualizar(Propietario propietario) {
-        for (int i = 0; i < listaPropietariosPrueba.size(); i++) {
-            if (listaPropietariosPrueba.get(i).getCedula().equals(propietario.getCedula())) {
-                listaPropietariosPrueba.set(i, propietario);
-                return true;
-            }
+        String sql = "UPDATE propietario SET nombre_propietario = ?, correoelectronico_propietario = ?, direccion_propietario = ?, fechadexpedicion_propietario = ?, contacto1_propietario = ?, contacto2_propietario = ? WHERE cedula_propietario = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, propietario.getNombreCompleto());
+            ps.setString(2, propietario.getCorreo());
+            ps.setString(3, propietario.getDireccion());
+            ps.setString(4, propietario.getFechaExpedicion());
+            ps.setInt(5, Integer.parseInt(propietario.getNumeroContacto1()));
+            ps.setInt(6, Integer.parseInt(propietario.getNumeroContacto2()));
+            ps.setInt(7, Integer.parseInt(propietario.getCedula()));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public boolean eliminar(String cedula) {
-        return listaPropietariosPrueba.removeIf(propietario -> propietario.getCedula().equals(cedula));
+        String sql = "DELETE FROM propietario WHERE cedula_propietario = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(cedula));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Propietario listarPorCedula(String cedula) {
-        return listaPropietariosPrueba.stream()
-                .filter(p -> p.getCedula().equals(cedula))
-                .findFirst()
-                .orElse(null);
+        Propietario propietario = null;
+        String sql = "SELECT * FROM propietario WHERE cedula_propietario = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(cedula));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                propietario = new Propietario();
+                propietario.setCedula(String.valueOf(rs.getInt("cedula_propietario")));
+                propietario.setNombreCompleto(rs.getString("nombre_propietario"));
+                propietario.setCorreo(rs.getString("correoelectronico_propietario"));
+                propietario.setDireccion(rs.getString("direccion_propietario"));
+                propietario.setFechaExpedicion(rs.getString("fechadexpedicion_propietario"));
+                propietario.setNumeroContacto1(String.valueOf(rs.getInt("contacto1_propietario")));
+                propietario.setNumeroContacto2(String.valueOf(rs.getInt("contacto2_propietario")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return propietario;
     }
 }

@@ -45,52 +45,51 @@ public class AgenteDAO {
         }
         return agentes;
     }
-
-    // Método para insertar un agente comercial
-    public boolean insertar(Agente agente) {
-        String sql = "INSERT INTO agentecomercial (cedula_agentecomercial, login_agentecomercial, nombrecompleto_agentecomercial, correoelectronico_agentecomercial, celular_agentecomercial, fechadexpedicion_agentecomercial, fechadenacimiento_agentecomercial, direccion_agentecomercial, contrasena_agentecomercial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, Integer.parseInt(agente.getCedula()));
-            ps.setString(2, agente.getLogin());
-            ps.setString(3, agente.getNombreCompleto());
-            ps.setString(4, agente.getCorreo());
-            ps.setInt(5, Integer.parseInt(agente.getCelular()));
-            ps.setString(6, agente.getFechaExpedicion());
-            ps.setString(7, agente.getFechaNacimiento());
-            ps.setString(8, agente.getDireccion());
-            ps.setString(9, agente.getPassword());
-            LOGGER.info("Ejecutando inserción: " + sql);
-            int rows = ps.executeUpdate();
-            LOGGER.info("Inserción finalizada. Filas afectadas: " + rows);
-            return rows > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar agente: " + e.getMessage(), e);
-            return false;
-        }
+// Método para insertar un agente comercial
+public boolean insertar(Agente agente) {
+    String sql = "INSERT INTO agentecomercial (cedula_agentecomercial, login_agentecomercial, nombrecompleto_agentecomercial, correoelectronico_agentecomercial, celular_agentecomercial, fechadexpedicion_agentecomercial, fechadenacimiento_agentecomercial, direccion_agentecomercial, contrasena_agentecomercial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        ps.setInt(1, Integer.parseInt(agente.getCedula())); // Asegúrate de que cedula sea un int
+        ps.setString(2, agente.getLogin());
+        ps.setString(3, agente.getNombreCompleto());
+        ps.setString(4, agente.getCorreo());
+        ps.setInt(5, Integer.parseInt(agente.getCelular())); // Asegúrate de que celular sea un int
+        ps.setDate(6, java.sql.Date.valueOf(agente.getFechaExpedicion())); // Asegúrate de que la fecha esté en formato adecuado
+        ps.setDate(7, java.sql.Date.valueOf(agente.getFechaNacimiento())); // Asegúrate de que la fecha esté en formato adecuado
+        ps.setString(8, agente.getDireccion());
+        ps.setString(9, agente.getPassword());
+        LOGGER.info("Ejecutando inserción: " + sql);
+        int rows = ps.executeUpdate();
+        LOGGER.info("Inserción finalizada. Filas afectadas: " + rows);
+        return rows > 0;
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al insertar agente: " + e.getMessage(), e);
+        return false;
     }
+}
 
-    // Método para actualizar un agente comercial
-    public boolean actualizar(Agente agente) {
-        String sql = "UPDATE agentecomercial SET login_agentecomercial = ?, nombrecompleto_agentecomercial = ?, correoelectronico_agentecomercial = ?, celular_agentecomercial = ?, fechadexpedicion_agentecomercial = ?, fechadenacimiento_agentecomercial = ?, direccion_agentecomercial = ?, contrasena_agentecomercial = ? WHERE cedula_agentecomercial = ?";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setString(1, agente.getLogin());
-            ps.setString(2, agente.getNombreCompleto());
-            ps.setString(3, agente.getCorreo());
-            ps.setInt(4, Integer.parseInt(agente.getCelular()));
-            ps.setString(5, agente.getFechaExpedicion());
-            ps.setString(6, agente.getFechaNacimiento());
-            ps.setString(7, agente.getDireccion());
-            ps.setString(8, agente.getPassword());
-            ps.setInt(9, Integer.parseInt(agente.getCedula()));
-            LOGGER.info("Ejecutando actualización: " + sql);
-            int rows = ps.executeUpdate();
-            LOGGER.info("Actualización finalizada. Filas afectadas: " + rows);
-            return rows > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al actualizar agente: " + e.getMessage(), e);
-            return false;
-        }
+// Método para actualizar un agente comercial
+public boolean actualizar(Agente agente) {
+    String sql = "UPDATE agentecomercial SET login_agentecomercial = ?, nombrecompleto_agentecomercial = ?, correoelectronico_agentecomercial = ?, celular_agentecomercial = ?, fechadexpedicion_agentecomercial = ?, fechadenacimiento_agentecomercial = ?, direccion_agentecomercial = ?, contrasena_agentecomercial = ? WHERE cedula_agentecomercial = ?";
+    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        ps.setString(1, agente.getLogin());
+        ps.setString(2, agente.getNombreCompleto());
+        ps.setString(3, agente.getCorreo());
+        ps.setInt(4, Integer.parseInt(agente.getCelular())); // Asegúrate de que celular sea un int
+        ps.setDate(5, java.sql.Date.valueOf(agente.getFechaExpedicion())); // Asegúrate de que la fecha esté en formato adecuado
+        ps.setDate(6, java.sql.Date.valueOf(agente.getFechaNacimiento())); // Asegúrate de que la fecha esté en formato adecuado
+        ps.setString(7, agente.getDireccion());
+        ps.setString(8, agente.getPassword());
+        ps.setInt(9, Integer.parseInt(agente.getCedula())); // Asegúrate de que cedula sea un int
+        LOGGER.info("Ejecutando actualización: " + sql);
+        int rows = ps.executeUpdate();
+        LOGGER.info("Actualización finalizada. Filas afectadas: " + rows);
+        return rows > 0;
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al actualizar agente: " + e.getMessage(), e);
+        return false;
     }
+}
 
     // Método para eliminar un agente comercial
     public boolean eliminar(String cedula) {

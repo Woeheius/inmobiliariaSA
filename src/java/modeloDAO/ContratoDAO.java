@@ -1,92 +1,99 @@
 package modeloDAO;
 
+import config.Conexion;
 import modeloDTO.Contrato;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 public class ContratoDAO {
-    private List<Contrato> listaContratosPrueba;
+    private Connection conexion;
 
     public ContratoDAO() {
-        inicializarDatosPrueba();
-    }
-
-    private void inicializarDatosPrueba() {
-        listaContratosPrueba = new ArrayList<>();
-        
-        // Añadimos algunos contratos de prueba
-        Contrato contrato1 = new Contrato("C001", "Contrato de Venta", "Venta", "2023-01-01", "2024-01-01", 100000.0, 5.0, "INM001", "CLI001", "AG001");
-        Contrato contrato2 = new Contrato("C002", "Contrato de Alquiler", "Alquiler", "2023-02-01", "2024-02-01", 5000.0, 2.0, "INM002", "CLI002", "AG002");
-        Contrato contrato3 = new Contrato("C003", "Contrato de Venta", "Venta", "2023-03-15", "2024-03-15", 150000.0, 4.5, "INM003", "CLI003", "AG001");
-        
-        listaContratosPrueba.add(contrato1);
-        listaContratosPrueba.add(contrato2);
-        listaContratosPrueba.add(contrato3);
+        Conexion conn = new Conexion();
+        this.conexion = conn.getConexion();
     }
 
     public List<Contrato> listar() {
-        return listaContratosPrueba;
+        List<Contrato> listaContratos = new ArrayList<>();
+        String sql = "SELECT * FROM contrato";
+        try (PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Contrato contrato = new Contrato();
+                contrato.setCodigo(String.valueOf(rs.getInt("codigo_contrato")));
+                contrato.setFechaCreacion(rs.getString("fechadecreacion_contrato"));
+                contrato.setFechaExpiracion(rs.getString("fechadeexpedicion_contrato"));
+                contrato.setDescripcion(rs.getString("descripcion_contrato"));
+                contrato.setValor(rs.getInt("valordeventaoalquiler_contrato"));
+                listaContratos.add(contrato);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaContratos;
     }
 
     public boolean agregar(Contrato contrato) {
-        return listaContratosPrueba.add(contrato);
+        String sql = "INSERT INTO contrato (codigo_contrato, fechadecreacion_contrato, fechadeexpedicion_contrato, descripcion_contrato, valordeventaoalquiler_contrato) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(contrato.getCodigo()));
+            ps.setString(2, contrato.getFechaCreacion());
+            ps.setString(3, contrato.getFechaExpiracion());
+            ps.setString(4, contrato.getDescripcion());
+            ps.setInt(5, (int) contrato.getValor());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean actualizar(Contrato contrato) {
-        for (int i = 0; i < listaContratosPrueba.size(); i++) {
-            if (listaContratosPrueba.get(i).getCodigo().equals(contrato.getCodigo())) {
-                listaContratosPrueba.set(i, contrato);
-                return true;
-            }
+        String sql = "UPDATE contrato SET fechadecreacion_contrato = ?, fechadeexpedicion_contrato = ?, descripcion_contrato = ?, valordeventaoalquiler_contrato = ? WHERE codigo_contrato = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, contrato.getFechaCreacion());
+            ps.setString(2, contrato.getFechaExpiracion());
+            ps.setString(3, contrato.getDescripcion());
+            ps.setInt(4, (int) contrato.getValor());
+            ps.setInt(5, Integer.parseInt(contrato.getCodigo()));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public boolean eliminar(String codigo) {
-        return listaContratosPrueba.removeIf(contrato -> contrato.getCodigo().equals(codigo));
+        String sql = "DELETE FROM contrato WHERE codigo_contrato = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(codigo));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Contrato listarPorCodigo(String codigo) {
-        return listaContratosPrueba.stream()
-                .filter(c -> c.getCodigo().equals(codigo))
-                .findFirst()
-                .orElse(null);
-    }
-
-    // Métodos para reportes
-
-    public List<Contrato> listarPorAgente(String cedulaAgente) {
-        return listaContratosPrueba.stream()
-                .filter(c -> c.getCedulaAgente().equals(cedulaAgente))
-                .collect(Collectors.toList());
-    }
-
-    public List<Contrato> listarPorCliente(String cedulaCliente) {
-        return listaContratosPrueba.stream()
-                .filter(c -> c.getCedulaCliente().equals(cedulaCliente))
-                .collect(Collectors.toList());
-    }
-
-    public List<Contrato> listarPorInmueble(String codigoInmueble) {
-        return listaContratosPrueba.stream()
-                .filter(c -> c.getCodigoInmueble().equals(codigoInmueble))
-                .collect(Collectors.toList());
-    }
-
-    public List<Contrato> listarPorTipoYFecha(String tipoContrato, String fechaInicio, String fechaFin) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate inicio = LocalDate.parse(fechaInicio, formatter);
-        LocalDate fin = LocalDate.parse(fechaFin, formatter);
-
-        return listaContratosPrueba.stream()
-                .filter(c -> c.getTipoContrato().equals(tipoContrato))
-                .filter(c -> {
-                    LocalDate fechaCreacion = LocalDate.parse(c.getFechaCreacion(), formatter);
-                    return !fechaCreacion.isBefore(inicio) && !fechaCreacion.isAfter(fin);
-                })
-                .collect(Collectors.toList());
+        Contrato contrato = null;
+        String sql = "SELECT * FROM contrato WHERE codigo_contrato = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(codigo));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                contrato = new Contrato();
+                contrato.setCodigo(String.valueOf(rs.getInt("codigo_contrato")));
+                contrato.setFechaCreacion(rs.getString("fechadecreacion_contrato"));
+                contrato.setFechaExpiracion(rs.getString("fechadeexpedicion_contrato"));
+                contrato.setDescripcion(rs.getString("descripcion_contrato"));
+                contrato.setValor(rs.getInt("valordeventaoalquiler_contrato"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contrato;
     }
 }
