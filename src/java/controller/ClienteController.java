@@ -34,11 +34,14 @@ public class ClienteController extends HttpServlet {
                 request.setAttribute("cliente", cliente);
                 request.getRequestDispatcher("views/clientes/editar.jsp").forward(request, response);
                 break;
-case "eliminar":
-    String cedulaEliminar = request.getParameter("cedula");
-    clienteDAO.eliminar(cedulaEliminar);
-    response.sendRedirect("ClienteController?action=listar");
-    break;
+            case "eliminar":
+                String cedulaEliminar = request.getParameter("cedula");
+                clienteDAO.eliminar(cedulaEliminar);
+                response.sendRedirect("ClienteController?action=listar");
+                break;
+            case "login": // Nueva acción para el inicio de sesión
+                loginCliente(request, response);
+                break;
             default:
                 listarClientes(request, response);
                 break;
@@ -66,11 +69,34 @@ case "eliminar":
         cliente.setNumeroContacto2(request.getParameter("numeroContacto2"));
 
         if ("agregar".equals(action)) {
-            clienteDAO.agregar(cliente);
+            // Validar que el cliente no exista antes de agregar
+            if (clienteDAO.listarPorCedula(cliente.getCedula()) == null) {
+                clienteDAO.agregar(cliente);
+                response.sendRedirect("ClienteController?action=listar");
+            } else {
+                request.setAttribute("errorMessage", "El cliente ya está registrado.");
+                request.getRequestDispatcher("views/clientes/registrar.jsp").forward(request, response);
+            }
         } else if ("actualizar".equals(action)) {
             clienteDAO.actualizar(cliente);
+            response.sendRedirect("ClienteController?action=listar");
         }
+    }
 
-        response.sendRedirect("ClienteController?action=listar");
+    private void loginCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String cedula = request.getParameter("username"); // Usar cédula como nombre de usuario
+        String password = request.getParameter("password"); // Usar cédula como contraseña
+
+        // Buscar cliente por cédula
+        Cliente cliente = clienteDAO.listarPorCedula(cedula);
+        if (cliente != null && cliente.getCedula().equals(password)) {
+            // Iniciar sesión exitosamente
+            request.getSession().setAttribute("cliente", cliente);
+            response.sendRedirect("menuCliente.jsp"); // Redirigir al menú del cliente
+        } else {
+            // Mensaje de error en caso de falla
+            request.setAttribute("errorMessage", "Usuario o contraseña incorrectos.");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
     }
 }

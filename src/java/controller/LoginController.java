@@ -20,8 +20,8 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("username");
-        String password = request.getParameter("password");
+        String login = request.getParameter("username"); // Login del agente o correo del cliente
+        String password = request.getParameter("password"); // Contraseña del agente o cédula del cliente
 
         // Verificar usuario maestro "admin"
         if ("admin".equals(login) && "admin".equals(password)) {
@@ -34,8 +34,17 @@ public class LoginController extends HttpServlet {
             return;
         }
 
+        // Verificar si es un agente
+        Agente agente = agenteDAO.listarPorLogin(login); // Usar login para buscar al agente
+        if (agente != null && agente.getPassword().equals(password)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("agente", agente);
+            response.sendRedirect("menuAgente.jsp");
+            return;
+        }
+
         // Verificar si es un cliente
-        Cliente cliente = clienteDAO.listarPorCedula(login);
+        Cliente cliente = clienteDAO.listarPorCorreo(login); // Buscar cliente por correo
         if (cliente != null && cliente.getCedula().equals(password)) {
             HttpSession session = request.getSession();
             session.setAttribute("cliente", cliente);

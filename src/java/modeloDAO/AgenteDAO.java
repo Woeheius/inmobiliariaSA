@@ -133,4 +133,27 @@ public boolean actualizar(Agente agente) {
     }
     return agente;
 }
+    public Agente listarPorLogin(String login) {
+    Agente agente = null;
+    String sql = "SELECT * FROM agentecomercial WHERE login_agentecomercial = ?";
+    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        ps.setString(1, login);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            agente = new Agente();
+            agente.setLogin(rs.getString("login_agentecomercial"));
+            agente.setPassword(rs.getString("contrasena_agentecomercial"));
+            agente.setCedula(String.valueOf(rs.getInt("cedula_agentecomercial")));
+            agente.setNombreCompleto(rs.getString("nombrecompleto_agentecomercial"));
+            agente.setDireccion(rs.getString("direccion_agentecomercial"));
+            agente.setFechaNacimiento(rs.getString("fechadenacimiento_agentecomercial"));
+            agente.setFechaExpedicion(rs.getString("fechadexpedicion_agentecomercial"));
+            agente.setCorreo(rs.getString("correoelectronico_agentecomercial"));
+            agente.setCelular(String.valueOf(rs.getInt("celular_agentecomercial")));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return agente;
+}
 }

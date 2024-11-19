@@ -63,7 +63,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
             display: none; /* Ocultar inicialmente */
         }
-        /* Resto del CSS sin cambios */
         .form-control {
             background-color: rgba(255, 255, 255, 0.5);
             border: none;
@@ -87,7 +86,7 @@
             position: absolute;
             top: 50%;
             right: 10px;
-            transform: translateY(-50%);
+            transform: translateY(- 50%);
             cursor: pointer;
             color: black;
         }
@@ -106,7 +105,6 @@
             padding: 10px 0;
             z-index: 1000;
         }
-
         /* Estilos para el modo oscuro */
         body.dark-mode {
             background-color: #121212;
@@ -189,7 +187,7 @@
                 <!-- Formulario de registro oculto inicialmente -->
                 <div class="register-container">
                     <h2 class="login-title mb-4">Registrarse</h2>
-                    <form id="register-form" action="ClienteController" method=" POST">
+                    <form id="register-form" action="ClienteController" method="POST">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <input type="text" class="form-control" name="cedula" placeholder="Cédula" required>
@@ -268,13 +266,12 @@
         const darkModeBtn = document.querySelector('#dark-mode-btn');
         darkModeBtn.addEventListener('click', function (e) {
             document.body.classList.toggle('dark-mode');
-            this .textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Oscuro';
+            this.textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Oscuro';
         });
 
         const registerBtn = document.querySelector('#register-btn');
         const loginContainer = document.querySelector('.login-container');
         const registerContainer = document.querySelector('.register-container');
-
         registerBtn.addEventListener('click', function () {
             if (registerContainer.style.display === 'none') {
                 loginContainer.style.display = 'none';

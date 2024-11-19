@@ -108,4 +108,26 @@ public class ClienteDAO {
         }
         return cliente;
     }
+    public Cliente listarPorCorreo(String correo) {
+    Cliente cliente = null;
+    String sql = "SELECT * FROM cliente WHERE correoelectronico_cliente = ?";
+    try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        ps.setString(1, correo);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            cliente = new Cliente();
+            cliente.setCedula(String.valueOf(rs.getInt("cedula_cliente")));
+            cliente.setNombreCompleto(rs.getString("nombrecompleto_cliente"));
+            cliente.setCorreo(rs.getString("correoelectronico_cliente"));
+            cliente.setDireccion(rs.getString("direccion_cliente"));
+            cliente.setFechaNacimiento(rs.getString("fechadenacimiento_cliente"));
+            cliente.setFechaExpedicion(rs.getString("fechadexpedicion_cliente"));
+            cliente.setNumeroContacto1(String.valueOf(rs.getInt("contacto1_cliente")));
+            cliente.setNumeroContacto2(String.valueOf(rs.getInt("contacto2_cliente")));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return cliente;
+}
 }
