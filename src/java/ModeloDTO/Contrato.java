@@ -4,16 +4,11 @@ public class Contrato {
     // Campos existentes
     private String codigo;
     private String descripcion;
-    private String tipoContrato;
+    private String tipoContrato; // Este campo puede ser "cliente" o "propietario"
     private String fechaCreacion;
     private String fechaExpiracion;
     private double valor;
     private double porcentajeComision;
-    
-    // Nuevos campos para relaciones
-    private String codigoInmueble;
-    private String cedulaCliente;
-    private String cedulaAgente;
 
     // Constructor vacío
     public Contrato() {}
@@ -21,18 +16,14 @@ public class Contrato {
     // Constructor completo
     public Contrato(String codigo, String descripcion, String tipoContrato, 
                    String fechaCreacion, String fechaExpiracion, double valor, 
-                   double porcentajeComision, String codigoInmueble, 
-                   String cedulaCliente, String cedulaAgente) {
+                   double porcentajeComision) {
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.tipoContrato = tipoContrato;
+        this.tipoContrato = tipoContrato; // Nuevo campo
         this.fechaCreacion = fechaCreacion;
         this.fechaExpiracion = fechaExpiracion;
         this.valor = valor;
         this.porcentajeComision = porcentajeComision;
-        this.codigoInmueble = codigoInmueble;
-        this.cedulaCliente = cedulaCliente;
-        this.cedulaAgente = cedulaAgente;
     }
 
     // Getters y Setters existentes
@@ -56,14 +47,4 @@ public class Contrato {
 
     public double getPorcentajeComision() { return porcentajeComision; }
     public void setPorcentajeComision(double porcentajeComision) { this.porcentajeComision = porcentajeComision; }
-
-    // Nuevos Getters y Setters para las relaciones
-    public String getCodigoInmueble() { return codigoInmueble; }
-    public void setCodigoInmueble(String codigoInmueble) { this.codigoInmueble = codigoInmueble; }
-
-    public String getCedulaCliente() { return cedulaCliente; }
-    public void setCedulaCliente(String cedulaCliente) { this.cedulaCliente = cedulaCliente; }
-
-    public String getCedulaAgente() { return cedulaAgente; }
-    public void setCedulaAgente(String cedulaAgente) { this.cedulaAgente = cedulaAgente; }
 }

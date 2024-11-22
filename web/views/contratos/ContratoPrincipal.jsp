@@ -36,62 +36,80 @@
 
 <div class="container">
     <h2 class="text-primary mb-4">Gestión de Contratos</h2>
-    <a href="ContratoController?action=registrar" class="btn btn-primary mb-3">Registrar Nuevo Contrato</a>
     
+    <h4>Contratos con Clientes</h4>
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Código</th>
                     <th>Descripción</th>
-                    <th>Tipo de Contrato</th>
                     <th>Fecha de Creación</th>
                     <th>Fecha de Expiración</th>
                     <th>Valor</th>
-                    <th>Porcentaje de Comisión</th>
-                    <th>Código de Inmueble</th>
-                    <th>Cédula del Cliente</th>
-                    <th>Cédula del Agente</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
-<tbody>
-    <c:forEach var="contrato" items="${listaContratos}">
-        <tr>
-            <td>${contrato.codigo}</td>
-            <td>${contrato.descripcion}</td>
-            <td>${contrato.tipoContrato}</td>
-            <td>${contrato.fechaCreacion}</td>
-            <td>${contrato.fechaExpiracion}</td>
-            <td>${contrato.valor}</td>
-            <td>${contrato.porcentajeComision}</td>
-            <td>${contrato.codigoInmueble}</td>
-            <td>${contrato.cedulaCliente}</td>
-            <td>${contrato.cedulaAgente}</td>
-            <td>
-                <div class="btn-group" role="group">
-                    <a href="ContratoController?action=editar&codigo=${contrato.codigo}" 
-                       class="btn btn-sm btn-primary">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a href="ContratoController?action=eliminar&codigo=${contrato.codigo}" 
-                       class="btn btn-sm btn-danger" 
-                       onclick="return confirm('¿Está seguro de eliminar este contrato?')">
-                        <i class="fas fa-trash"></i> Eliminar
-                    </a>
-                </div>
-            </td>
-        </tr>
-    </c:forEach>
-</tbody>
+            <tbody>
+                <c:forEach var="contrato" items="${listaContratosClientes}">
+                    <tr>
+                        <td>${contrato.codigo}</td>
+                        <td>${contrato.descripcion}</td>
+                        <td>${contrato.fechaCreacion}</td>
+                        <td>${contrato.fechaExpiracion}</td>
+                        <td>${contrato.valor}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="ContratoController?action=editar&codigo=${contrato.codigo}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="ContratoController?action=eliminar&codigo=${contrato.codigo}" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de eliminar este contrato?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
         </table>
     </div>
+
+    <h4>Contratos con Propietarios</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Fecha de Creación</th>
+                    <th>Fecha de Expiración</th>
+                    <th>Valor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="contrato" items="${listaContratosPropietarios}">
+                    <tr>
+                        <td>${contrato.codigo}</td>
+                        <td>${contrato.descripcion}</td>
+                        <td>${contrato.fechaCreacion}</td>
+                        <td>${contrato.fechaExpiracion}</td>
+                        <td>${contrato.valor}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="ContratoController?action=editar&codigo=${contrato.codigo}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="ContratoController?action=eliminar&codigo=${contrato.codigo}" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de eliminar este contrato?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="ContratoController?action=registrar" class="btn btn-primary mb-3">Registrar Nuevo Contrato</a>
 </div>
 
 <!-- Font Awesome para los iconos -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4 /dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>

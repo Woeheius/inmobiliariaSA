@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
         }
 
         // Verificar si es un cliente
-        Cliente cliente = clienteDAO.listarPorCorreo(login); // Buscar cliente por correo
+        Cliente cliente = clienteDAO.listarPorCedula(login); // Buscar cliente por correo
         if (cliente != null && cliente.getCedula().equals(password)) {
             HttpSession session = request.getSession();
             session.setAttribute("cliente", cliente);
