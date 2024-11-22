@@ -36,51 +36,34 @@
 
 <div class="container">
     <h2 class="text-primary mb-4">Gestión de Inmuebles</h2>
-    <a href="InmuebleController?action=registrar" class="btn btn-primary mb-3">Registrar Nuevo Inmueble</a>
     
+    <h4>Inmuebles de Clientes</h4>
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Código</th>
                     <th>Descripción</th>
-                    <th>Tipo</th>
+                    <th>Dirección</th>
+                    <th>Tipo de Inmueble</th>
                     <th>Modalidad</th>
                     <th>Precio</th>
-                    <th>Estado</th>
-                    <th>Baños</th>
-                    <th>Tamaño</th>
-                    <th>Departamento</th>
-                    <th>Ciudad</th>
-                    <th>Dirección</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="inmueble" items="${listaInmuebles}">
+                <c:forEach var="inmueble" items="${listaInmueblesClientes}">
                     <tr>
                         <td>${inmueble.codigo}</td>
                         <td>${inmueble.descripcion}</td>
+                        <td>${inmueble.direccion}</td>
                         <td>${inmueble.tipoInmueble}</td>
                         <td>${inmueble.modalidad}</td>
                         <td>${inmueble.precio}</td>
-                        <td>${inmueble.estado}</td>
-                        <td>${inmueble.cantidadBanos}</td>
-                        <td>${inmueble.tamano}</td>
-                        <td>${inmueble.departamento}</td>
-                        <td>${inmueble.ciudad}</td>
-                        <td>${inmueble.direccion}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="InmuebleController?action=editar&codigo=${inmueble.codigo}" 
-                                   class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-<a href="InmuebleController?action=eliminar&codigo=${inmueble.codigo}" 
-   class="btn btn-sm btn-danger" 
-   onclick="return confirm('¿Está seguro de eliminar este inmueble?')">
-    <i class="fas fa-trash"></i> Eliminar
-</a>
+                                <a href="InmuebleController?action=editar&codigo=${inmueble.codigo}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="InmuebleController?action=eliminar&codigo=${inmueble.codigo}" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de eliminar este inmueble?')">Eliminar</a>
                             </div>
                         </td>
                     </tr>
@@ -88,6 +71,43 @@
             </tbody>
         </table>
     </div>
+
+    <h4>Inmuebles de la Inmobiliaria</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Dirección</th>
+                    <th>Tipo de Inmueble</th>
+                    <th>Modalidad</ ```jsp
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="inmueble" items="${listaInmueblesInmobiliaria}">
+                    <tr>
+                        <td>${inmueble.codigo}</td>
+                        <td>${inmueble.descripcion}</td>
+                        <td>${inmueble.direccion}</td>
+                        <td>${inmueble.tipoInmueble}</td>
+                        <td>${inmueble.modalidad}</td>
+                        <td>${inmueble.precio}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="InmuebleController?action=editar&codigo=${inmueble.codigo}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="InmuebleController?action=eliminar&codigo=${inmueble.codigo}" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de eliminar este inmueble?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="InmuebleController?action=registrar" class="btn btn-primary mb-3">Registrar Nuevo Inmueble</a>
 </div>
 
 <!-- Font Awesome para los iconos -->
