@@ -40,45 +40,46 @@
     
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
-    <thead>
+<thead>
+    <tr>
+        <th>Cédula</th>
+        <th>Nombre Completo</th>
+        <th>Dirección</th>
+        <th>Fecha de Nacimiento</th> <!-- Nueva columna -->
+        <th>Fecha de Expedición</th>
+        <th>Correo</th>
+        <th>Número de Contacto 1</th>
+        <th>Número de Contacto 2</th>
+        <th>Acciones</th>
+    </tr>
+</thead>
+<tbody>
+    <c:forEach var="propietario" items="${listaPropietarios}">
         <tr>
-            <th>Cédula</th>
-            <th>Nombre Completo</th>
-            <th>Dirección</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Fecha de Expedición</th>
-            <th>Correo</th>
-            <th>Número de Contacto 1</th>
-            <th>Número de Contacto 2</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="propietario" items="${listaPropietarios}">
-            <tr>
-                 <td>${propietario.cedula}</td>
-                 <td>${propietario.nombreCompleto}</td>
-                 <td>${propietario.direccion}</td>
-                 <td>${propietario.fechaNacimiento}</td>
-                 <td>${propietario.fechaExpedicion}</td>
-                 <td>${propietario.correo}</td>
-                 <td>${propietario.numeroContacto1}</td>
-                 <td>${propietario.numeroContacto2}</td>
-                 <td>
-                    <a href="PropietarioController?action=editar&id=${propietario.id}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
+            <td>${propietario.cedula}</td>
+            <td>${propietario.nombreCompleto}</td>
+            <td>${propietario.direccion}</td>
+            <td>${propietario.fechaNacimiento}</td> <!-- Mostrar la fecha -->
+            <td>${propietario.fechaExpedicion}</td>
+            <td>${propietario.correo}</td>
+            <td>${propietario.numeroContacto1}</td>
+            <td>${propietario.numeroContacto2}</td>
+            <td>
+               <a href="PropietarioController?action=editar&cedula=${propietario.cedula}" class="btn btn-sm btn-primary">
+    <i class="fas fa-edit"></i> Editar
+</a>
+
                     <a href="PropietarioController?action=eliminar&cedula=${propietario.cedula}" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de eliminar este propietario?')">
                         <i class="fas fa-trash"></i> Eliminar
                     </a>
-                </td>
-            </tr>
-        </c:forEach>
-    </tbody>
+            </td>
+        </tr>
+    </c:forEach>
+</tbody>
+
 </table>
     </div>
 </div>
-
 <!-- Font Awesome para los iconos -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

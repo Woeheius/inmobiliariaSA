@@ -12,14 +12,14 @@ public class Inmueble {
     private String departamento;
     private String ciudad;
     private String direccion;
-    private String tipoPropiedad; // Nuevo campo para distinguir entre propiedad de cliente y de la inmobiliaria
+    // String tipoPropiedad; // Nuevo campo para distinguir entre propiedad de cliente y de la inmobiliaria
 
     public Inmueble() {}
 
     // Constructor con parámetros
     public Inmueble(String codigo, String descripcion, String tipoInmueble, 
                     String modalidad, double precio, String estado, int cantidadBanos, 
-                    double tamano, String departamento, String ciudad, String direccion, String tipoPropiedad) {
+                    double tamano, String departamento, String ciudad, String direccion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.tipoInmueble = tipoInmueble;
@@ -31,20 +31,10 @@ public class Inmueble {
         this.departamento = departamento;
         this.ciudad = ciudad;
         this.direccion = direccion;
-        this.tipoPropiedad = tipoPropiedad; // Inicializar el nuevo campo
+        //this.tipoPropiedad = tipoPropiedad; // Inicializar el nuevo campo
     }
 
     // Getters y Setters
-
-    public String getTipoPropiedad() {
-        return tipoPropiedad;
-    }
-
-    public void setTipoPropiedad(String tipoPropiedad) {
-        this.tipoPropiedad = tipoPropiedad;
-    }
-    
-    
 
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }

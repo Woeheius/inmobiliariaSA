@@ -31,7 +31,6 @@ public class InmuebleDAO {
                 inmueble.setPrecio(rs.getDouble("preciofinal_Inmueble"));
                 inmueble.setTamano(rs.getDouble("tamañoenmetroscuadrados_Inmueble"));
                 inmueble.setCiudad(rs.getString("codigo_ciudad"));
-                inmueble.setTipoPropiedad(rs.getString("tipo_propiedad")); // Manejar el nuevo campo
                 listaInmuebles.add(inmueble);
             }
         } catch (SQLException e) {
@@ -41,7 +40,7 @@ public class InmuebleDAO {
     }
 
     public boolean agregar(Inmueble inmueble) {
-        String sql = "INSERT INTO Inmueble (codigo_Inmueble, direccion_Inmueble, descripcion_Inmueble, tipodeinmueble_Inmueble, modalidaddecomercializacion_Inmueble, preciofinal_Inmueble, cantidaddebaños_Inmueble, tamañoenmetroscuadrados_Inmueble, codigo_ciudad, tipo_propiedad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Inmueble (codigo_Inmueble, direccion_Inmueble, descripcion_Inmueble, tipodeinmueble_Inmueble, modalidaddecomercializacion_Inmueble, preciofinal_Inmueble, cantidaddebaños_Inmueble, tamañoenmetroscuadrados_Inmueble, codigo_ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setInt(1, Integer.parseInt(inmueble.getCodigo()));
             ps.setString(2, inmueble.getDireccion());
@@ -52,7 +51,6 @@ public class InmuebleDAO {
             ps.setInt(7, inmueble.getCantidadBanos());
             ps.setDouble(8, inmueble.getTamano());
             ps.setInt(9, Integer.parseInt(inmueble.getCiudad()));
-            ps.setString(10, inmueble.getTipoPropiedad()); // Agregar el nuevo campo
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,7 +59,7 @@ public class InmuebleDAO {
     }
 
     public boolean actualizar(Inmueble inmueble) {
-        String sql = "UPDATE Inmueble SET direccion_Inmueble = ?, descripcion_Inmueble = ?, tipodeinmueble_Inmueble = ?, modalidaddecomercializacion_Inmueble = ?, preciofinal_Inmueble = ?, cantidaddebaños_Inmueble = ?, tamañoenmetroscuadrados_Inmueble = ?, codigo_ciudad = ?, tipo_propiedad = ? WHERE codigo_Inmueble = ?";
+        String sql = "UPDATE Inmueble SET direccion_Inmueble = ?, descripcion_Inmueble = ?, tipodeinmueble_Inmueble = ?, modalidaddecomercializacion_Inmueble = ?, preciofinal_Inmueble = ?, cantidaddebaños_Inmueble = ?, tamañoenmetroscuadrados_Inmueble = ?, codigo_ciudad = ?, tipo_inmueble = ? WHERE codigo_Inmueble = ?";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, inmueble.getDireccion());
             ps.setString(2, inmueble.getDescripcion());
@@ -71,7 +69,7 @@ public class InmuebleDAO {
             ps.setInt(6, inmueble.getCantidadBanos());
             ps.setDouble(7, inmueble.getTamano());
             ps.setInt(8, Integer.parseInt(inmueble.getCiudad()));
-            ps.setString(9, inmueble.getTipoPropiedad()); // Agregar el nuevo campo
+           // ps.setString(9, inmueble.getTipoPropiedad());// Agregar el nuevo campo
             ps.setInt(10, Integer.parseInt(inmueble.getCodigo()));
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
